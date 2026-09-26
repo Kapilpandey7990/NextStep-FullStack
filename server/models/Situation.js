@@ -5,7 +5,7 @@ const issueSchema = new mongoose.Schema(
     id: String,
     title: String,
     category: String,
-    urgency: Number,
+    urgency: mongoose.Schema.Types.Mixed,
     deadline: Date,
     depends_on: [String],
   },
