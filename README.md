@@ -79,7 +79,6 @@ NextStep-FullStack/
 │   ├── package.json
 │   └── ...
 │
-├── .env
 ├── .env.example
 ├── .gitignore
 └── README.md
