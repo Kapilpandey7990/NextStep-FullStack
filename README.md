@@ -407,17 +407,31 @@ The first pressure points would likely be:
 
 ---
 
-## Curveball / Unexpected Integration Behaviour
 
-During integration testing, the external API returned an issue with an `urgency` value represented as a string such as `"high"`, while the initial MongoDB schema expected a numeric urgency.
+## Curveball Response — Privacy and Situation Ownership
 
-That caused a Mongoose cast failure during an update.
+The team sent a change asking us to investigate a case where a user's friend opened NextStep on the friend's own phone and was able to see the user's situation.
 
-I changed the stored urgency field to accept the provider's actual response shape instead of assuming the mock API would always match the initial schema assumption. I then reran the update flow and verified that the updated situation and version history were stored successfully.
+I treated this as a privacy and authorization problem rather than a UI issue.
 
-This was a useful reminder to treat the provider response as an external contract that can be messy, rather than assuming every field will always match an ideal local type.
+In the current challenge implementation, authentication and user accounts are not implemented because they were outside the required thin-slice scope. Situations are therefore not currently bound to an authenticated user identity.
 
----
+My response would be to make situation ownership an explicit part of the data model and access-control layer before treating the application as production-ready.
+
+The production design would:
+
+- associate every situation with an authenticated user ID
+- verify ownership before returning a situation
+- verify ownership before submitting answers
+- verify ownership before updating a situation
+- prevent a situation ID alone from granting access
+- use secure authentication/session handling
+- avoid exposing private situation data to another user's device
+
+I would not solve this only by hiding situation IDs in the frontend, because that does not provide real authorization.
+
+For this challenge submission, I kept the existing thin slice stable rather than adding an incomplete authentication system immediately before submission. I documented this as a security/privacy limitation and identified authorization as a required step before production use.
+
 
 ## Jugaad
 
